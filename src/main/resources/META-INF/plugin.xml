@@ -157,7 +157,6 @@
                          level="WARNING"
                          hasStaticDescription="true"
                          implementationClass="com.demonwav.mcdev.platform.forge.sideonly.NestedClassSideOnlyInspection"/>
-
         <localInspection displayName="Invalid usage of @SideOnly in field declaration"
                          groupName="Minecraft Forge"
                          language="JAVA"
@@ -165,7 +164,6 @@
                          level="WARNING"
                          hasStaticDescription="true"
                          implementationClass="com.demonwav.mcdev.platform.forge.sideonly.FieldDeclarationSideOnlyInspection"/>
-
         <localInspection displayName="Invalid usage of @SideOnly in method declaration"
                          groupName="Minecraft Forge"
                          language="JAVA"
@@ -173,7 +171,6 @@
                          level="WARNING"
                          hasStaticDescription="true"
                          implementationClass="com.demonwav.mcdev.platform.forge.sideonly.MethodSideOnlyInspection"/>
-
         <localInspection displayName="Invalid usage of variable annotated with @SideOnly"
                          groupName="Minecraft Forge"
                          language="JAVA"
@@ -188,7 +185,6 @@
                          level="WARNING"
                          hasStaticDescription="true"
                          implementationClass="com.demonwav.mcdev.platform.forge.sideonly.MethodCallSideOnlyInspection"/>
-
         <localInspection displayName="Invalid usage of new object annotated with @SideOnly"
                          groupName="Minecraft Forge"
                          language="JAVA"
@@ -196,7 +192,6 @@
                          level="WARNING"
                          hasStaticDescription="true"
                          implementationClass="com.demonwav.mcdev.platform.forge.sideonly.NewExpressionSideOnlyInspection"/>
-
         <localInspection displayName="Invalid usage of local variable declaration annotated with @SideOnly"
                          groupName="Minecraft Forge"
                          language="JAVA"
@@ -220,6 +215,16 @@
                          level="ERROR"
                          hasStaticDescription="true"
                          implementationClass="com.demonwav.mcdev.platform.mixin.inspections.MixinInspection"/>
+        <localInspection displayName="Overwrite lacking @author JavaDoc tag"
+                         shortName="OverwriteAuthorRequired"
+                         groupName="Mixin"
+                         language="JAVA"
+                         enabledByDefault="true"
+                         level="WEAK WARNING"
+                         hasStaticDescription="true"
+                         implementationClass="com.demonwav.mcdev.platform.mixin.inspections.AuthorInspection"/>
+
+        <customJavadocTagProvider implementation="com.demonwav.mcdev.platform.mixin.MixinCustomJavaDocTagProvider"/>
 
         <!-- Project View Node Decorators provide the project icons -->
         <projectViewNodeDecorator implementation="com.demonwav.mcdev.platform.MinecraftProjectViewNodeDecorator"/>
@@ -229,6 +234,7 @@
                                  id="Settings.Minecraft"
                                  groupId="language"
                                  instance="com.demonwav.mcdev.MinecraftConfigurable"/>
+
         <applicationService serviceImplementation="com.demonwav.mcdev.MinecraftSettings"/>
     </extensions>
     <extensions defaultExtensionNs="org.jetbrains.idea.maven">
