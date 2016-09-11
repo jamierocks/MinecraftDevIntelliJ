@@ -12,10 +12,12 @@ import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiExpressionList;
+import com.intellij.psi.PsiField;
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.impl.compiled.ClsTypeElementImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,26 +39,33 @@ public class ColorUtil {
             return null;
         }
 
-        MinecraftModule minecraftModule = MinecraftModule.getInstance(module);
+        final MinecraftModule minecraftModule = MinecraftModule.getInstance(module);
         if (minecraftModule == null) {
             return null;
         }
 
-        PsiReferenceExpression expression = (PsiReferenceExpression) element;
-        PsiType type = expression.getType();
-        if (type == null) {
+        final PsiReference ref = (PsiReferenceExpression) element;
+        final PsiElement e = ref.resolve();
+        if (e == null || !(e instanceof PsiField)) {
             return null;
         }
 
+        final PsiField res = (PsiField) e;
+
+        final String qualifiedName;
+        if (res.getTypeElement() instanceof ClsTypeElementImpl) {
+            final ClsTypeElementImpl typeElement = (ClsTypeElementImpl) res.getTypeElement();
+            // Sponge
+            qualifiedName = typeElement.getCanonicalText() + "." + res.getName();
+        } else {
+            // Enums
+            qualifiedName = res.getType().getCanonicalText() + "." + res.getName();
+        }
+
         for (AbstractModuleType<?> abstractModuleType : minecraftModule.getTypes()) {
-            Map<String, Color> map = abstractModuleType.getClassToColorMappings();
+            final Map<String, Color> map = abstractModuleType.getClassToColorMappings();
             for (Map.Entry<String, Color> entry : map.entrySet()) {
-                // This is such a hack
-                // Okay, type will be the fully-qualified class, but it will exclude the actual enum
-                // the expression will be the non-fully-qualified class with the enum
-                // So we combine those checks and get this
-                if (entry.getKey().startsWith(type.getCanonicalText()) &&
-                        entry.getKey().endsWith(expression.getCanonicalText())) {
+                if (entry.getKey().equals(qualifiedName)) {
                     return function.apply(map, entry);
                 }
             }
