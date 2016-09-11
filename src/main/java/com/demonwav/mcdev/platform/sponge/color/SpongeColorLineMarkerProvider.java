@@ -3,6 +3,7 @@ package com.demonwav.mcdev.platform.sponge.color;
 import com.demonwav.mcdev.insight.ColorLineMarkerProvider;
 import com.demonwav.mcdev.insight.ColorUtil;
 
+import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.codeInsight.daemon.NavigateAction;
@@ -48,7 +49,7 @@ public class SpongeColorLineMarkerProvider implements LineMarkerProvider {
             super(
                 element,
                 color,
-                (event, psiElement) -> {
+                (GutterIconNavigationHandler<PsiElement>) (event, psiElement) -> {
                     if (!element.isWritable()) {
                         return;
                     }

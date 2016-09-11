@@ -1,5 +1,7 @@
 package com.demonwav.mcdev.insight;
 
+import com.demonwav.mcdev.util.CommonColors;
+
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.util.ui.ColorIcon;
 import org.jetbrains.annotations.NotNull;
@@ -27,14 +29,10 @@ public class ColorPicker {
     private String chosenColor;
 
     @NotNull
-    private final Map<String, Color> colorMap;
-    @NotNull
     private final ColorPickerDialog dialog;
 
-    public ColorPicker(@NotNull Map<String, Color> colorMap, @NotNull Component parent) {
+    public ColorPicker(@NotNull Component parent) {
          dialog = new ColorPickerDialog(parent, panel);
-
-        this.colorMap = colorMap;
     }
 
     @Nullable
@@ -47,7 +45,8 @@ public class ColorPicker {
     }
 
     private void init() {
-        Iterator<Map.Entry<String, Color>> iterator = colorMap.entrySet().iterator();
+
+        Iterator<Map.Entry<String, Color>> iterator = CommonColors.getColorMap().entrySet().iterator();
         addToPanel(0, 8, panel, iterator);
         addToPanel(1, 8, panel, iterator);
     }

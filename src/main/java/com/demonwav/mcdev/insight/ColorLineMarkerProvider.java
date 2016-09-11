@@ -24,6 +24,7 @@ import java.awt.Color;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import javax.swing.Icon;
 
@@ -36,10 +37,13 @@ public class ColorLineMarkerProvider implements LineMarkerProvider {
             return null;
         }
 
-        ColorInfo info =  ColorUtil.findColorFromElement(element, (map, chosen) -> new ColorInfo(element, chosen.getValue(), map));
-        if (info != null) {
-            NavigateAction.setNavigateAction(info, "Change color", null);
+        final Color color = ColorUtil.findColorFromElement(element);
+        if (color == null) {
+            return null;
         }
+
+        ColorInfo info =  new ColorInfo(element, color, (BiConsumer<PsiElement, String>) ColorUtil::setColorTo);
+        NavigateAction.setNavigateAction(info, "Change color", null);
 
         return info;
     }
@@ -52,30 +56,32 @@ public class ColorLineMarkerProvider implements LineMarkerProvider {
 
         protected final Color color;
 
-        public ColorInfo(@NotNull final PsiElement element, @NotNull final Color color, @NotNull Map<String, Color> map) {
+        public ColorInfo(@NotNull final PsiElement element,
+                         @NotNull final Color color,
+                         @NotNull final BiConsumer<PsiElement, String> consumer) {
             super(
-                    element,
-                    element.getTextRange(),
-                    new ColorIcon(12, color),
-                    Pass.UPDATE_ALL,
-                    FunctionUtil.<Object, String>nullConstant(),
-                    (mouseEvent, psiElement) -> {
-                        if (!psiElement.isWritable()) {
-                            return;
-                        }
+                element,
+                element.getTextRange(),
+                new ColorIcon(12, color),
+                Pass.UPDATE_ALL,
+                FunctionUtil.<Object, String>nullConstant(),
+                (mouseEvent, psiElement) -> {
+                    if (!psiElement.isWritable()) {
+                        return;
+                    }
 
-                        final Editor editor = PsiUtilBase.findEditor(element);
-                        if (editor == null) {
-                            return;
-                        }
+                    final Editor editor = PsiUtilBase.findEditor(element);
+                    if (editor == null) {
+                        return;
+                    }
 
-                        ColorPicker picker = new ColorPicker(map, editor.getComponent());
-                        final String newColor = picker.showDialog();
-                        if (newColor != null) {
-                            ColorUtil.setColorTo(element, newColor);
-                        }
-                    },
-                    GutterIconRenderer.Alignment.CENTER
+                    ColorPicker picker = new ColorPicker(editor.getComponent());
+                    final String newColor = picker.showDialog();
+                    if (newColor != null) {
+                        consumer.accept(element, newColor);
+                    }
+                },
+                GutterIconRenderer.Alignment.CENTER
             );
             this.color = color;
         }
@@ -93,6 +99,10 @@ public class ColorLineMarkerProvider implements LineMarkerProvider {
                 GutterIconRenderer.Alignment.LEFT
             );
             this.color = color;
+        }
+
+        public void setColor(@NotNull final PsiElement element, @NotNull final String newColor) {
+            ColorUtil.setColorTo(element, newColor);
         }
 
         @Override

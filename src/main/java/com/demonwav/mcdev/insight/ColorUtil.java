@@ -1,6 +1,5 @@
 package com.demonwav.mcdev.insight;
 
-import com.demonwav.mcdev.platform.AbstractModuleType;
 import com.demonwav.mcdev.platform.MinecraftModule;
 
 import com.intellij.lang.ASTNode;
@@ -23,13 +22,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.Color;
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.Optional;
 
 public class ColorUtil {
 
     @Nullable
-    public static <T> T findColorFromElement(@NotNull PsiElement element,
-                                             @NotNull BiFunction<Map<String, Color>, Map.Entry<String, Color>, T> function) {
+    public static Color findColorFromElement(@NotNull PsiElement element) {
         if (!(element instanceof PsiReferenceExpression)) {
             return null;
         }
@@ -62,14 +60,14 @@ public class ColorUtil {
             qualifiedName = res.getType().getCanonicalText() + "." + res.getName();
         }
 
-        for (AbstractModuleType<?> abstractModuleType : minecraftModule.getTypes()) {
-            final Map<String, Color> map = abstractModuleType.getClassToColorMappings();
-            for (Map.Entry<String, Color> entry : map.entrySet()) {
-                if (entry.getKey().equals(qualifiedName)) {
-                    return function.apply(map, entry);
-                }
-            }
+        final Optional<Color> color = minecraftModule.getTypes().stream().flatMap(abstractModuleType ->
+            abstractModuleType.getClassToColorMappings().entrySet().stream()
+        ).filter(m -> m.getKey().equals(qualifiedName)).map(Map.Entry::getValue).findFirst();
+
+        if (color.isPresent()) {
+            return color.get();
         }
+
         return null;
     }
 
