@@ -1,8 +1,11 @@
 package com.demonwav.mcdev.util;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
+import java.util.Collection;
 import java.util.Map;
 
 public final class CommonColors {
@@ -24,25 +27,32 @@ public final class CommonColors {
     @NotNull private static final Color DARK_GRAY = new Color(0x555555);
     @NotNull private static final Color BLACK = new Color(0x000000);
 
+    @NotNull private static final ImmutableMap<String, Color> colorMap = ImmutableMap.<String, Color>builder()
+            .put("DARK_RED", DARK_RED)
+            .put("RED", RED)
+            .put("GOLD", GOLD)
+            .put("YELLOW", YELLOW)
+            .put("DARK_GREEN", DARK_GREEN)
+            .put("GREEN", GREEN)
+            .put("AQUA", AQUA)
+            .put("DARK_AQUA", DARK_AQUA)
+            .put("DARK_BLUE", DARK_BLUE)
+            .put("BLUE", BLUE)
+            .put("LIGHT_PURPLE", LIGHT_PURPLE)
+            .put("DARK_PURPLE", DARK_PURPLE)
+            .put("WHITE", WHITE)
+            .put("GRAY", GRAY)
+            .put("DARK_GRAY", DARK_GRAY)
+            .put("BLACK", BLACK).build();
+
     private CommonColors() {
     }
 
     public static void applyStandardColors(@NotNull Map<String, Color> map, @NotNull String prefix) {
-        map.put(prefix + ".DARK_RED", DARK_RED);
-        map.put(prefix + ".RED", RED);
-        map.put(prefix + ".GOLD", GOLD);
-        map.put(prefix + ".YELLOW", YELLOW);
-        map.put(prefix + ".DARK_GREEN", DARK_GREEN);
-        map.put(prefix + ".GREEN", GREEN);
-        map.put(prefix + ".AQUA", AQUA);
-        map.put(prefix + ".DARK_AQUA", DARK_AQUA);
-        map.put(prefix + ".DARK_BLUE", DARK_BLUE);
-        map.put(prefix + ".BLUE", BLUE);
-        map.put(prefix + ".LIGHT_PURPLE", LIGHT_PURPLE);
-        map.put(prefix + ".DARK_PURPLE", DARK_PURPLE);
-        map.put(prefix + ".WHITE", WHITE);
-        map.put(prefix + ".GRAY", GRAY);
-        map.put(prefix + ".DARK_GRAY", DARK_GRAY);
-        map.put(prefix + ".BLACK", BLACK);
+        colorMap.forEach((key, value) -> map.put(prefix + "." + key, value));
+    }
+
+    public static ImmutableMap<String, Color> getColorMap() {
+        return colorMap;
     }
 }

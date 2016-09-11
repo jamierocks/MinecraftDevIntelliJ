@@ -53,8 +53,7 @@ class ScalaColorAnnotator extends Annotator {
         val qualifiedName = typeElement.getCanonicalText concat "." concat field.getName
 
         val color = minecraftModule.getTypes.toStream
-            .map(abstractModuleType => abstractModuleType.getClassToColorMappings)
-            .flatMap(map => map.toMap)
+            .flatMap(abstractModuleType => abstractModuleType.getClassToColorMappings.toMap)
             .find(t => t._1 == qualifiedName)
 
         if (color.isEmpty) {

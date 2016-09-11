@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Map;
 
 public class ColorAnnotator implements Annotator {
 
@@ -23,7 +24,7 @@ public class ColorAnnotator implements Annotator {
             return;
         }
 
-        final Color color = ColorUtil.findColorFromElement(element, (map, chosenEntry) -> chosenEntry.getValue());
+        final Color color = ColorUtil.findColorFromElement(element);
         if (color == null) {
             return;
         }
