@@ -4,6 +4,8 @@
     <depends optional="false">org.jetbrains.plugins.gradle</depends>
     <depends optional="false">org.intellij.groovy</depends>
     <depends optional="false">org.jetbrains.plugins.yaml</depends>
+    <depends optional="true">org.jetbrains.kotlin</depends>
+    <depends optional="true">org.intellij.scala</depends>
 
     <id>com.demonwav.minecraft-dev</id>
     <name>Minecraft Development</name>
@@ -158,7 +160,12 @@
 
         <!-- Project-independent Annotators-->
         <annotator language="JAVA" implementationClass="com.demonwav.mcdev.insight.ListenerEventAnnotator"/>
+        <annotator language="kotlin" implementationClass="com.demonwav.mcdev.kotlin.insight.KotlinListenerEventAnnotator"/>
+        <annotator language="Scala" implementationClass="com.demonwav.mcdev.scala.insight.ScalaListenerEventAnnotator"/>
+
         <annotator language="JAVA" implementationClass="com.demonwav.mcdev.insight.ColorAnnotator"/>
+        <annotator language="kotlin" implementationClass="com.demonwav.mcdev.kotlin.insight.KotlinColorAnnotator"/>
+        <annotator language="Scala" implementationClass="com.demonwav.mcdev.scala.insight.ScalaColorAnnotator"/>
 
         <!-- Sponge Annotator -->
         <annotator language="JAVA" implementationClass="com.demonwav.mcdev.platform.sponge.color.SpongeColorAnnotator"/>

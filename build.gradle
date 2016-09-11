@@ -1,23 +1,49 @@
+buildscript {
+    ext.kotlin_version = "1.0.3"
+    ext.scala_version = "2.11.8"
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
 plugins {
     id "org.jetbrains.intellij" version "0.1.10"
 }
 
-apply plugin: 'idea'
-apply plugin: 'org.jetbrains.intellij'
-apply plugin: 'java'
+apply plugin: "idea"
+apply plugin: "java"
+apply plugin: "kotlin"
+apply plugin: "scala"
 
 tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+    options.encoding = "UTF-8"
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
 }
 
+group "com.demonwav.minecraft-dev"
+version pluginVersion
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.scala-lang:scala-library:$scala_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+
 intellij {
     // IntelliJ IDEA dependency
-    version project.hasProperty('intellijVersion') ? project.getProperty('intellijVersion') : ideaVersion
+    version project.hasProperty("intellijVersion") ? project.getProperty("intellijVersion") : ideaVersion
     // Bundled plugin dependencies
-    plugins = ['maven', 'gradle', 'Groovy', 'yaml']
-    pluginName 'Minecraft Development'
+    plugins = ["maven", "gradle", "Groovy", "yaml", "Kotlin", "org.intellij.scala:2016.2.0"]
+    pluginName "Minecraft Development"
     updateSinceUntilBuild false
 
     downloadSources Boolean.valueOf(downloadIdeaSources)
@@ -31,32 +57,22 @@ idea {
     }
 
     module {
-        excludeDirs += file('.sandbox');
+        excludeDirs += file(".sandbox");
     }
 }
 
-group 'com.demonwav.minecraft-dev'
-version pluginVersion
-
 task initProp << {
-    def baseProp = file('src/main/resources/messages.MinecraftDevelopment_en.properties')
-    def baseEnglishProp = file('src/main/resources/messages.MinecraftDevelopment.properties')
+    def baseProp = file("src/main/resources/messages.MinecraftDevelopment_en.properties")
+    def baseEnglishProp = file("src/main/resources/messages.MinecraftDevelopment.properties")
 
     def comment =
-            "# Do not manually edit this file\n"
+            "# Do not manually edit this file\n" +
             "# This file is automatically copied from messages.MinecraftDevelopment_en_US.properties at build time\n"
 
-    def baseUsEnglishProp = file('src/main/resources/messages.MinecraftDevelopment_en_US.properties')
+    def baseUsEnglishProp = file("src/main/resources/messages.MinecraftDevelopment_en_US.properties")
 
     baseProp.write comment + baseUsEnglishProp.text
     baseEnglishProp.write comment + baseUsEnglishProp.text
-}
-
-// The intellij gui form creator doesn't seem to be reliable unless we delete the plugin contents each time...
-task cleanPlugin << {
-    def pluginDir = new File(intellij.sandboxDirectory, 'plugins/Minecraft Development')
-
-    pluginDir.deleteDir()
 }
 
 afterEvaluate {
