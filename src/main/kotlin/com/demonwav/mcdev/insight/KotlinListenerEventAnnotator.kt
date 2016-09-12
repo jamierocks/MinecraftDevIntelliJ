@@ -1,4 +1,4 @@
-package com.demonwav.mcdev.kotlin.insight
+package com.demonwav.mcdev.insight
 
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator

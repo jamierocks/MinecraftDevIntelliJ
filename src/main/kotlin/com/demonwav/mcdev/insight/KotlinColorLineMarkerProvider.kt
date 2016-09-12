@@ -1,4 +1,4 @@
-package com.demonwav.mcdev.kotlin.insight
+package com.demonwav.mcdev.insight
 
 import com.demonwav.mcdev.MinecraftSettings
 import com.demonwav.mcdev.insight.ColorLineMarkerProvider
