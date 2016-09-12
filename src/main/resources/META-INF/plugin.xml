@@ -154,19 +154,19 @@
         <!-- Project-independent Line Marker Providers -->
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.demonwav.mcdev.insight.ListenerLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.demonwav.mcdev.insight.ColorLineMarkerProvider"/>
-        <codeInsight.lineMarkerProvider language="kotlin" implementationClass="com.demonwav.mcdev.kotlin.insight.KotlinColorLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="kotlin" implementationClass="com.demonwav.mcdev.insight.KotlinColorLineMarkerProvider"/>
 
         <!-- Sponge Line Marker Provider -->
         <codeInsight.lineMarkerProvider language="" implementationClass="com.demonwav.mcdev.platform.sponge.color.SpongeColorLineMarkerProvider"/>
 
         <!-- Project-independent Annotators-->
         <annotator language="JAVA" implementationClass="com.demonwav.mcdev.insight.ListenerEventAnnotator"/>
-        <annotator language="kotlin" implementationClass="com.demonwav.mcdev.kotlin.insight.KotlinListenerEventAnnotator"/>
-        <annotator language="Scala" implementationClass="com.demonwav.mcdev.scala.insight.ScalaListenerEventAnnotator"/>
+        <annotator language="kotlin" implementationClass="com.demonwav.mcdev.insight.KotlinListenerEventAnnotator"/>
+        <annotator language="Scala" implementationClass="com.demonwav.mcdev.insight.ScalaListenerEventAnnotator"/>
 
         <annotator language="JAVA" implementationClass="com.demonwav.mcdev.insight.ColorAnnotator"/>
-        <annotator language="kotlin" implementationClass="com.demonwav.mcdev.kotlin.insight.KotlinColorAnnotator"/>
-        <annotator language="Scala" implementationClass="com.demonwav.mcdev.scala.insight.ScalaColorAnnotator"/>
+        <annotator language="kotlin" implementationClass="com.demonwav.mcdev.insight.KotlinColorAnnotator"/>
+        <annotator language="Scala" implementationClass="com.demonwav.mcdev.insight.ScalaColorAnnotator"/>
 
         <!-- Sponge Annotator -->
         <annotator language="JAVA" implementationClass="com.demonwav.mcdev.platform.sponge.color.SpongeColorAnnotator"/>

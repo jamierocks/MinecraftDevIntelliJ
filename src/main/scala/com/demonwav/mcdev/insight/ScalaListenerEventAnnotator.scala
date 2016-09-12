@@ -1,4 +1,4 @@
-package com.demonwav.mcdev.scala.insight
+package com.demonwav.mcdev.insight
 
 import com.intellij.lang.annotation.{AnnotationHolder, Annotator}
 import com.intellij.psi.PsiElement
