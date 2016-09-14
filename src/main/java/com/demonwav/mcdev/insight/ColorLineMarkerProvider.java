@@ -23,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.Color;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiConsumer;
 
 import javax.swing.Icon;

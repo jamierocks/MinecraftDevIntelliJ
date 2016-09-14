@@ -1,7 +1,6 @@
 package com.demonwav.mcdev.insight
 
 import com.demonwav.mcdev.MinecraftSettings
-import com.demonwav.mcdev.insight.ColorAnnotator
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.psi.PsiElement
@@ -13,7 +12,7 @@ class KotlinColorAnnotator : Annotator {
             return
         }
 
-        val color = KotlinColorUtil.findColorFromElement(element) { it.value } ?: return
+        val color = KotlinColorUtil.findColorFromElement(element) ?: return
 
         ColorAnnotator.setColorAnnotator(color, element.parent, holder)
     }
