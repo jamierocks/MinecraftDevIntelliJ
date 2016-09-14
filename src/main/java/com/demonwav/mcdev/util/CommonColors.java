@@ -1,11 +1,9 @@
 package com.demonwav.mcdev.util;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
-import java.util.Collection;
 import java.util.Map;
 
 public final class CommonColors {

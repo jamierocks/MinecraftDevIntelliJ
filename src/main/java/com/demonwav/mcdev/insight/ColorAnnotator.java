@@ -14,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.Map;
 
 public class ColorAnnotator implements Annotator {
 

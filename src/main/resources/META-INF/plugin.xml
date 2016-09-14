@@ -155,6 +155,7 @@
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.demonwav.mcdev.insight.ListenerLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.demonwav.mcdev.insight.ColorLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="kotlin" implementationClass="com.demonwav.mcdev.insight.KotlinColorLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="Scala" implementationClass="com.demonwav.mcdev.insight.ScalaColorLineMarkerProvider"/>
 
         <!-- Sponge Line Marker Provider -->
         <codeInsight.lineMarkerProvider language="" implementationClass="com.demonwav.mcdev.platform.sponge.color.SpongeColorLineMarkerProvider"/>
