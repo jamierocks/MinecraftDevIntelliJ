@@ -19,7 +19,6 @@ import com.intellij.openapi.fileEditor.ex.IdeDocumentHistory;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -30,7 +29,6 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.Function;
 import com.intellij.util.NullableFunction;
 import org.jetbrains.annotations.Contract;
@@ -80,7 +78,7 @@ public class ListenerLineMarkerProvider extends LineMarkerProviderDescriptor {
     // This is a navigation handler that just simply goes and opens up the event's declaration,
     // even if the event target is a nested class.
     @NotNull
-    private static GutterIconNavigationHandler<PsiElement> createHandler(PsiMethod method) {
+    public static GutterIconNavigationHandler<PsiElement> createHandler(PsiMethod method) {
         return (e, element1) -> {
             // We need to re-evaluate the targeted method, because if the method signature slightly changes before
             // IntelliJ decides to re-evaluate the method, but the class is no longer valid.
@@ -91,9 +89,8 @@ public class ListenerLineMarkerProvider extends LineMarkerProviderDescriptor {
                 return;
             }
             final PsiClass resolve = parameter.second;
-            final VirtualFile virtualFile = PsiUtilCore.getVirtualFile(resolve);
 
-            if (virtualFile != null && containingFile != null) {
+            if (containingFile != null) {
                 final Project project = method.getProject();
                 final Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
 
@@ -110,8 +107,7 @@ public class ListenerLineMarkerProvider extends LineMarkerProviderDescriptor {
     }
 
     @Override
-    public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
-    }
+    public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {}
 
     @NotNull
     @Override
@@ -125,7 +121,7 @@ public class ListenerLineMarkerProvider extends LineMarkerProviderDescriptor {
         return PlatformAssets.LISTENER;
     }
 
-    private static final class EventLineMarkerInfo extends MergeableLineMarkerInfo<PsiElement> {
+    public static final class EventLineMarkerInfo extends MergeableLineMarkerInfo<PsiElement> {
         EventLineMarkerInfo(@NotNull PsiElement element,
                             @NotNull TextRange range,
                             @NotNull Icon icon,
@@ -176,7 +172,7 @@ public class ListenerLineMarkerProvider extends LineMarkerProviderDescriptor {
         }
     }
 
-    private static void gotoTargetElement(@NotNull PsiElement element, @NotNull Editor currentEditor, @NotNull PsiFile currentFile) {
+    public static void gotoTargetElement(@NotNull PsiElement element, @NotNull Editor currentEditor, @NotNull PsiFile currentFile) {
         if (element.getContainingFile() == currentFile) {
             int offset = element.getTextOffset();
             PsiElement leaf = currentFile.findElementAt(offset);

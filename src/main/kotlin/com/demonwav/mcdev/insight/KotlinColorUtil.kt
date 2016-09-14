@@ -1,3 +1,4 @@
+@file:JvmName("KotlinColorUtil")
 package com.demonwav.mcdev.insight
 
 import com.demonwav.mcdev.platform.MinecraftModule
@@ -12,51 +13,48 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import java.awt.Color
 
-object KotlinColorUtil {
-
-    fun findColorFromElement(element: PsiElement): Color? {
-        if (element !is KtNameReferenceExpression) {
-            return null
-        }
-
-        val module = ModuleUtilCore.findModuleForPsiElement(element) ?: return null
-        val minecraftModule = MinecraftModule.getInstance(module) ?: return null
-
-        val ref = element.mainReference
-        val res = ref.resolve()
-
-        if (res !is PsiField) {
-            return null
-        }
-
-        val qualifiedName = if (res.typeElement is ClsTypeElementImpl) {
-            val typeElement = res.typeElement as ClsTypeElementImpl
-            typeElement.canonicalText + "." + res.name
-        } else {
-            res.type.canonicalText + "." + res.name
-        }
-
-        val entry = minecraftModule.types.asSequence().flatMap {
-            it.classToColorMappings.asSequence()
-        }.find {
-            it.key == qualifiedName
-        } ?: return null
-
-        return entry.value
+fun PsiElement.findColor(): Color? {
+    if (this !is KtNameReferenceExpression) {
+        return null
     }
 
-    fun setColorTo(element: PsiElement, color: String) {
-        try {
-            WriteCommandAction.runWriteCommandAction(element.project) {
-                val node = element.node
-                val child = node.findChildByType(KtTokens.IDENTIFIER) ?: return@runWriteCommandAction
+    val module = ModuleUtilCore.findModuleForPsiElement(this) ?: return null
+    val minecraftModule = MinecraftModule.getInstance(module) ?: return null
 
-                val identifier = KtPsiFactory(element.project).createIdentifier(color)
+    val ref = this.mainReference
+    val res = ref.resolve()
 
-                child.psi.replace(identifier)
-            }
-        } catch (throwable: Throwable) {
-            throwable.printStackTrace()
+    if (res !is PsiField) {
+        return null
+    }
+
+    val qualifiedName = if (res.typeElement is ClsTypeElementImpl) {
+        val typeElement = res.typeElement as ClsTypeElementImpl
+        typeElement.canonicalText + "." + res.name
+    } else {
+        res.type.canonicalText + "." + res.name
+    }
+
+    val entry = minecraftModule.types.asSequence().flatMap {
+        it.classToColorMappings.asSequence()
+    }.find {
+        it.key == qualifiedName
+    } ?: return null
+
+    return entry.value
+}
+
+fun PsiElement.setColorTo(color: String) {
+    try {
+        WriteCommandAction.runWriteCommandAction(this.project) {
+            val node = this.node
+            val child = node.findChildByType(KtTokens.IDENTIFIER) ?: return@runWriteCommandAction
+
+            val identifier = KtPsiFactory(this.project).createIdentifier(color)
+
+            child.psi.replace(identifier)
         }
+    } catch (throwable: Throwable) {
+        throwable.printStackTrace()
     }
 }

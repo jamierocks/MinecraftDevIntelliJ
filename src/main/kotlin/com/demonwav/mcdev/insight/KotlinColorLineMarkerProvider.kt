@@ -14,9 +14,9 @@ class KotlinColorLineMarkerProvider : LineMarkerProvider {
             return null
         }
 
-        val color = KotlinColorUtil.findColorFromElement(element) ?: return null
+        val color = element.findColor() ?: return null
         val info = ColorLineMarkerProvider.ColorInfo(element, color, BiConsumer { element, newColor ->
-                KotlinColorUtil.setColorTo(element, newColor)
+                element.setColorTo(newColor)
             })
 
         NavigateAction.setNavigateAction(info, "Change color", null)

@@ -12,7 +12,7 @@ class KotlinColorAnnotator : Annotator {
             return
         }
 
-        val color = KotlinColorUtil.findColorFromElement(element) ?: return
+        val color = element.findColor() ?: return
 
         ColorAnnotator.setColorAnnotator(color, element.parent, holder)
     }
