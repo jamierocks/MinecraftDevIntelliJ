@@ -1,7 +1,6 @@
 package com.demonwav.mcdev.insight
 
 import com.demonwav.mcdev.MinecraftSettings
-import com.demonwav.mcdev.insight.ColorAnnotator
 import com.demonwav.mcdev.platform.MinecraftModule
 import com.intellij.lang.annotation.{AnnotationHolder, Annotator}
 import com.intellij.openapi.module.ModuleUtilCore
