@@ -1,6 +1,5 @@
 package com.demonwav.mcdev.inspection;
 
-import com.google.common.collect.ImmutableList;
 import com.intellij.codeInspection.reference.EntryPoint;
 import com.intellij.codeInspection.reference.RefElement;
 import com.intellij.openapi.util.InvalidDataException;
@@ -40,7 +39,7 @@ public class PlatformAnnotationEntryPoint extends EntryPoint {
     @Nullable
     @Override
     public String[] getIgnoreAnnotations() {
-        return ImmutableList.of("org.spongepowered.api.event.Listener", "org.bukkit.event.EventHandler").toArray(new String[2]);
+        return new String[] { "org.bukkit.event.EventHandler", "org.spongepowered.api.event.Listener" };
     }
 
     @Override
