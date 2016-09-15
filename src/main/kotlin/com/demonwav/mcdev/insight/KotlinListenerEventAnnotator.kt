@@ -58,8 +58,8 @@ class KotlinListenerEventAnnotator : Annotator {
                 throw Exception()
             }
 
-            if (!instance.isEventClassValid(eventClass, annotation)) {
-                throw Exception()
+            if (instance.isEventClassValid(eventClass, annotation)) {
+                return
             }
 
             if (!ListenerEventAnnotator.isSuperEventListenerAllowed(eventClass, annotation, instance)) {
