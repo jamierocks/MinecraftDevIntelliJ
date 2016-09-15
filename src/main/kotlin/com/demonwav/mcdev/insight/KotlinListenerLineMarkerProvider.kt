@@ -8,7 +8,7 @@ import com.intellij.codeInsight.daemon.LineMarkerProviderDescriptor
 import com.intellij.psi.PsiElement
 import javax.swing.Icon
 
-class KotlinListenerLineMarkerProvider : LineMarkerProviderDescriptor() {
+class KotlinListenerLineMarkerProvider : ListenerLineMarkerProvider() {
 
     override fun getLineMarkerInfo(element: PsiElement): LineMarkerInfo<*>? {
         if (!MinecraftSettings.getInstance().isShowEventListenerGutterIcons) {
@@ -24,15 +24,5 @@ class KotlinListenerLineMarkerProvider : LineMarkerProviderDescriptor() {
             Pass.UPDATE_ALL,
             function.handler
         )
-    }
-
-    override fun getName(): String {
-        return "Event Listener line marker"
-    }
-
-    override fun collectSlowLineMarkers(elements: List<PsiElement>, result: Collection<LineMarkerInfo<*>>) {}
-
-    override fun getIcon(): Icon {
-        return PlatformAssets.LISTENER
     }
 }

@@ -18,7 +18,10 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
+import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isObjectLiteral
+import org.jetbrains.kotlin.psi.psiUtil.isPrivate
+import org.jetbrains.kotlin.psi.psiUtil.isProtected
 import org.jetbrains.kotlin.psi.stubs.elements.KtStubElementTypes
 import org.jetbrains.kotlin.renderer.render
 
@@ -29,12 +32,14 @@ fun PsiElement.getEventListener(): Pair<PsiElement, KtNamedFunction>? {
 
     val function = this.parent as KtNamedFunction
 
-    // Effectively checking if it's static
     if (function.isTopLevel ||
         function.containingClassOrObject?.isObjectLiteral() == true ||
         function.hasModifier(KtTokens.ABSTRACT_KEYWORD) ||
-        function.hasModifier(KtTokens.PRIVATE_KEYWORD)) {
-        // Hopefully this works. Needs to handle Forge allowing static listeners
+        function.isPrivate() ||
+        function.isProtected() ||
+        function.isLocal ||
+        function.isExtensionDeclaration()) {
+        // TODO Forge allows static listeners, we need to check for objectLiteral and @JvmStatic in that case
         return null
     }
 
@@ -47,7 +52,7 @@ fun PsiElement.getEventListener(): Pair<PsiElement, KtNamedFunction>? {
 
     var contains = false
     for (listenerAnnotation in listenerAnnotations) {
-
+        // Seriously?
         if (modifierList?.annotationEntries?.find {
             it?.calleeExpression
                 ?.constructorReferenceExpression
