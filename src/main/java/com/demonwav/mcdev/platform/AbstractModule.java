@@ -7,7 +7,9 @@ import com.demonwav.mcdev.insight.generation.GenerationData;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifierListOwner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,15 +49,15 @@ public abstract class AbstractModule {
      * is not going to throw an error at runtime.
      *
      * @param eventClass The PsiClass of the event listener argument
-     * @param method The method of the event listener
+     * @param annotation The fully qualified name of the annotation on the method
      * @return True if the class is valid or ignored. Returning false may highlight the
      *     method as an error and prevent compiling.
      */
-    public boolean isEventClassValid(PsiClass eventClass, PsiMethod method) {
+    public boolean isEventClassValid(PsiElement eventClass, String annotation) {
         return true;
     }
 
-    public String writeErrorMessageForEventParameter(PsiClass eventClass, PsiMethod method) {
+    public String writeErrorMessageForEventParameter(PsiElement eventClass, String annotation) {
         return "Parameter does not extend the proper Event Class!";
     }
 

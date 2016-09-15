@@ -11,7 +11,9 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifierListOwner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -152,25 +154,25 @@ public class MinecraftModule {
         return false;
     }
 
-    public boolean isEventClassValid(@NotNull PsiClass eventClass, @NotNull PsiMethod method) {
+    public boolean isEventClassValid(@NotNull PsiElement eventClass, @NotNull String annotation) {
         for (AbstractModule abstractModule : modules.values()) {
             boolean good = abstractModule.getModuleType().getListenerAnnotations().stream()
-                    .anyMatch(listenerAnnotation -> method.getModifierList().findAnnotation(listenerAnnotation) != null);
+                    .anyMatch(annotation::equals);
 
             if (good) {
-                return abstractModule.isEventClassValid(eventClass, method);
+                return abstractModule.isEventClassValid(eventClass, annotation);
             }
         }
         return false;
     }
 
-    public String writeErrorMessageForEvent(@NotNull PsiClass eventClass, @NotNull PsiMethod method) {
+    public String writeErrorMessageForEvent(@NotNull PsiElement eventClass, @NotNull String annotation) {
         for (AbstractModule abstractModule : modules.values()) {
             boolean good = abstractModule.getModuleType().getListenerAnnotations().stream()
-                    .anyMatch(listenerAnnotation -> method.getModifierList().findAnnotation(listenerAnnotation) != null);
+                    .anyMatch(annotation::equals);
 
             if (good) {
-                return abstractModule.writeErrorMessageForEventParameter(eventClass, method);
+                return abstractModule.writeErrorMessageForEventParameter(eventClass, annotation);
             }
         }
         return null;

@@ -7,7 +7,9 @@ import com.demonwav.mcdev.platform.PlatformType;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifierListOwner;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.Icon;
@@ -40,7 +42,7 @@ public class LiteLoaderModule extends AbstractModule {
     }
 
     @Override
-    public boolean isEventClassValid(PsiClass eventClass, PsiMethod method) {
+    public boolean isEventClassValid(PsiElement eventClass, String annotation) {
         return true;
     }
 

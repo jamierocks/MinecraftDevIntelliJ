@@ -19,8 +19,10 @@ import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiAnnotationMemberValue;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
+import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiParameterList;
 import com.intellij.psi.PsiType;
@@ -108,12 +110,13 @@ public class BukkitModule<T extends BukkitModuleType> extends AbstractModule {
     }
 
     @Override
-    public boolean isEventClassValid(PsiClass eventClass, PsiMethod method) {
-        return BukkitConstants.BUKKIT_EVENT_CLASS.equals(eventClass.getQualifiedName());
+    public boolean isEventClassValid(PsiElement eventClass, String annotation) {
+        return (eventClass instanceof PsiClass) &&
+                BukkitConstants.BUKKIT_EVENT_CLASS.equals(((PsiClass) eventClass).getQualifiedName());
     }
 
     @Override
-    public String writeErrorMessageForEventParameter(PsiClass eventClass, PsiMethod method) {
+    public String writeErrorMessageForEventParameter(PsiElement eventClass, String annotation) {
         return "Parameter is not a subclass of org.bukkit.event.Event\n" +
                 "Compiling and running this listener may result in a runtime exception";
     }

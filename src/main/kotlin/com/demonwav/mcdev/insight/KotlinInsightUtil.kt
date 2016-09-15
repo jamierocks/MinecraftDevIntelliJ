@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isObjectLiteral
 import org.jetbrains.kotlin.psi.stubs.elements.KtStubElementTypes
 import org.jetbrains.kotlin.renderer.render
 
-fun PsiElement.getEventListener(): Pair<PsiClass, KtNamedFunction>? {
+fun PsiElement.getEventListener(): Pair<PsiElement, KtNamedFunction>? {
     if (this !is LeafPsiElement || this.parent !is KtNamedFunction || this.elementType != KtTokens.IDENTIFIER) {
         return null
     }
@@ -73,7 +73,7 @@ fun PsiElement.getEventListener(): Pair<PsiClass, KtNamedFunction>? {
     val parameter = parameters[0] ?: return null
 
     val userType = parameter.typeReference?.typeElement as KtUserType? ?: return null
-    val resolve = userType.referenceExpression?.mainReference?.resolve() as PsiClass? ?: return null
+    val resolve = userType.referenceExpression?.mainReference?.resolve() ?: return null
 
     return resolve to function
 }
@@ -91,7 +91,7 @@ fun KtNamedFunction.getEventParameterPair(): Pair<KtTypeReference, PsiClass>? {
         ?.findChildByType(KtStubElementTypes.REFERENCE_EXPRESSION)
         ?.psi as KtNameReferenceExpression? ?: return null
 
-    val resolve = type.mainReference.resolve() as PsiClass? ?: return null
+    val resolve = type.mainReference.resolve() as? PsiClass? ?: return null
 
     return parameter to resolve
 }

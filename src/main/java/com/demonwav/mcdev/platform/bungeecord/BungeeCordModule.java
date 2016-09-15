@@ -18,8 +18,10 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiAnnotationMemberValue;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
+import com.intellij.psi.PsiModifierListOwner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,12 +78,13 @@ public class BungeeCordModule extends AbstractModule {
     }
 
     @Override
-    public boolean isEventClassValid(PsiClass eventClass, PsiMethod method) {
-        return BungeeCordConstants.BUNGEECORD_EVENT_CLASS.equals(eventClass.getQualifiedName());
+    public boolean isEventClassValid(PsiElement eventClass, String annotation) {
+        return (eventClass instanceof PsiClass) &&
+                BungeeCordConstants.BUNGEECORD_EVENT_CLASS.equals(((PsiClass) eventClass).getQualifiedName());
     }
 
     @Override
-    public String writeErrorMessageForEventParameter(PsiClass eventClass, PsiMethod method) {
+    public String writeErrorMessageForEventParameter(PsiElement eventClass, String annotation) {
         return "Parameter is not a subclass of net.md_5.bungee.api.plugin.Event\n" +
                 "Compiling and running this listener may result in a runtime exception";
     }

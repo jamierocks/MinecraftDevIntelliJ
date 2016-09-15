@@ -55,13 +55,19 @@ public class ListenerEventAnnotator implements Annotator {
         // some platforms may have multiple allowed annotations for various cases
         final Collection<AbstractModuleType<?>> moduleTypes = instance.getTypes();
         boolean contains = false;
+        String annotation = null;
         for (AbstractModuleType<?> moduleType : moduleTypes) {
             final List<String> listenerAnnotations = moduleType.getListenerAnnotations();
             for (String listenerAnnotation : listenerAnnotations) {
                 if (modifierList.findAnnotation(listenerAnnotation) != null) {
                     contains = true;
+                    annotation = listenerAnnotation;
                     break;
                 }
+            }
+
+            if (contains) {
+                break;
             }
         }
         if (!contains) {
@@ -95,22 +101,27 @@ public class ListenerEventAnnotator implements Annotator {
             return;
         }
 
-        if (instance.isEventClassValid(eventClass, method)) {
+        if (instance.isEventClassValid(eventClass, annotation)) {
             return;
         }
 
-        if (!isSuperEventListenerAllowed(eventClass, method, instance)) {
-            holder.createErrorAnnotation(eventParameter, instance.writeErrorMessageForEvent(eventClass, method));
+        if (!isSuperEventListenerAllowed(eventClass, annotation, instance)) {
+            holder.createErrorAnnotation(eventParameter, instance.writeErrorMessageForEvent(eventClass, annotation));
         }
     }
 
-    private static boolean isSuperEventListenerAllowed(PsiClass eventClass, PsiMethod method, MinecraftModule module) {
-        final PsiClass[] supers = eventClass.getSupers();
+    public static boolean isSuperEventListenerAllowed(PsiElement eventClass, String annotation, MinecraftModule module) {
+        if (!(eventClass instanceof PsiClass)) {
+            return false;
+        }
+
+        final PsiClass psiClass = (PsiClass) eventClass;
+        final PsiClass[] supers = psiClass.getSupers();
         for (PsiClass aSuper : supers) {
-            if (module.isEventClassValid(aSuper, method)) {
+            if (module.isEventClassValid(aSuper, annotation)) {
                 return true;
             }
-            if (isSuperEventListenerAllowed(aSuper, method, module)) {
+            if (isSuperEventListenerAllowed(aSuper, annotation, module)) {
                 return true;
             }
         }

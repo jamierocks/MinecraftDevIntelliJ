@@ -14,8 +14,10 @@ import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiClassType;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
+import com.intellij.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiParameterList;
 import com.intellij.psi.PsiType;
@@ -55,20 +57,24 @@ public class ForgeModule extends AbstractModule {
     }
 
     @Override
-    public boolean isEventClassValid(PsiClass eventClass, PsiMethod method) {
-        if (method == null ) {
-            return "net.minecraftforge.fml.common.event.FMLEvent".equals(eventClass.getQualifiedName()) ||
-                "net.minecraftforge.fml.common.eventhandler.Event".equals(eventClass.getQualifiedName());
+    public boolean isEventClassValid(PsiElement eventClass, String annotation) {
+        if (!(eventClass instanceof PsiClass)) {
+            return false;
         }
 
-        PsiAnnotation annotation = method.getModifierList().findAnnotation("net.minecraftforge.fml.common.Mod.EventHandler");
-        if (annotation != null) {
-            return "net.minecraftforge.fml.common.event.FMLEvent".equals(eventClass.getQualifiedName());
+        final PsiClass psiClass = (PsiClass) eventClass;
+
+        if (annotation == null ) {
+            return "net.minecraftforge.fml.common.event.FMLEvent".equals(psiClass.getQualifiedName()) ||
+                "net.minecraftforge.fml.common.eventhandler.Event".equals(psiClass.getQualifiedName());
         }
 
-        annotation = method.getModifierList().findAnnotation("net.minecraftforge.fml.common.eventhandler.SubscribeEvent");
-        if (annotation != null) {
-            return "net.minecraftforge.fml.common.eventhandler.Event".equals(eventClass.getQualifiedName());
+        if (annotation.equals("net.minecraftforge.fml.common.Mod.EventHandler")) {
+            return "net.minecraftforge.fml.common.event.FMLEvent".equals(psiClass.getQualifiedName());
+        }
+
+        if (annotation.equals("net.minecraftforge.fml.common.eventhandler.SubscribeEvent")) {
+            return "net.minecraftforge.fml.common.eventhandler.Event".equals(psiClass.getQualifiedName());
         }
 
         // just default to true
@@ -76,10 +82,8 @@ public class ForgeModule extends AbstractModule {
     }
 
     @Override
-    public String writeErrorMessageForEventParameter(PsiClass eventClass, PsiMethod method) {
-        PsiAnnotation annotation = method.getModifierList().findAnnotation("net.minecraftforge.fml.common.Mod.EventHandler");
-
-        if (annotation != null) {
+    public String writeErrorMessageForEventParameter(PsiElement eventClass, String annotation) {
+        if (annotation.equals("net.minecraftforge.fml.common.Mod.EventHandler")) {
             return "Parameter is not a subclass of net.minecraftforge.fml.common.event.FMLEvent\n" +
                     "Compiling and running this listener may result in a runtime exception";
         }

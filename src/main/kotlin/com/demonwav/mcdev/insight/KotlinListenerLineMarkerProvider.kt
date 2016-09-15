@@ -15,14 +15,14 @@ class KotlinListenerLineMarkerProvider : LineMarkerProviderDescriptor() {
             return null
         }
 
-        val (psiClass, psiMethod) = element.getEventListener() ?: return null
+        val (any, function) = element.getEventListener() ?: return null
 
         return ListenerLineMarkerProvider.EventLineMarkerInfo(
             element,
             element.textRange,
             icon,
             Pass.UPDATE_ALL,
-            psiMethod.handler
+            function.handler
         )
     }
 
