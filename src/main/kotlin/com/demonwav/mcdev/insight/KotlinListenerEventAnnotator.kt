@@ -5,6 +5,7 @@ import com.demonwav.mcdev.platform.MinecraftModule
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.openapi.module.ModuleUtilCore
+import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.idea.refactoring.fqName.getKotlinFqName
 import org.jetbrains.kotlin.idea.references.mainReference
@@ -29,7 +30,7 @@ class KotlinListenerEventAnnotator : Annotator {
             val (anyClass, function) = element.getEventListener() ?: return
             eventClass = anyClass
             var error = false
-            if (anyClass is KtClassOrObject) {
+            if (anyClass !is PsiClass) {
                 // Don't throw exception here because we need to get the annotation and parameter first
                 error = true
             }
