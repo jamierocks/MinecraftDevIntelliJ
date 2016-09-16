@@ -19,7 +19,7 @@ import scala.collection.JavaConversions._
 
 object ScalaInsightUtil {
 
-    def getEventListenerForElement(element: PsiElement): (PsiClass, ScFunctionDefinition) = {
+    def getEventListenerForElement(element: PsiElement): (PsiElement, ScFunctionDefinition) = {
         if (!element.isInstanceOf[LeafPsiElement] ||
             !element.getParent.isInstanceOf[ScFunctionDefinition] ||
             element.asInstanceOf[LeafPsiElement].getElementType != ScalaTokenTypes.tIDENTIFIER) {

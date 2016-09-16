@@ -5,8 +5,8 @@ import java.awt.Color
 import com.demonwav.mcdev.platform.MinecraftModule
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.module.ModuleUtilCore
-import com.intellij.psi.PsiElement
-import com.intellij.psi.impl.compiled.{ClsFieldImpl, ClsTypeElementImpl}
+import com.intellij.psi.{PsiElement, PsiField}
+import com.intellij.psi.impl.compiled.{ClsClassImpl, ClsFieldImpl, ClsTypeElementImpl}
 import org.jetbrains.plugins.scala.lang.lexer.ScalaTokenTypes
 import org.jetbrains.plugins.scala.lang.psi.api.expr.ScReferenceExpression
 import org.jetbrains.plugins.scala.lang.psi.impl.ScalaPsiElementFactory
@@ -34,18 +34,18 @@ object ScalaColorUtil {
         val ref = element.getReference
         val res = ref.resolve()
 
-        if (!res.isInstanceOf[ClsFieldImpl]) {
+        if (!res.isInstanceOf[PsiField]) {
             return null
         }
 
-        val field = res.asInstanceOf[ClsFieldImpl]
-        if (!field.getTypeElement.isInstanceOf[ClsTypeElementImpl]) {
-            return null
+        val field = res.asInstanceOf[PsiField]
+        val qualifiedName = field.getTypeElement match {
+            case typeElement: ClsTypeElementImpl =>
+                typeElement.getCanonicalText + "." + field.getName
+            case _ =>
+                // Enums
+                field.getType.getCanonicalText() + "." + field.getName
         }
-
-        val typeElement = field.getTypeElement.asInstanceOf[ClsTypeElementImpl]
-
-        val qualifiedName = typeElement.getCanonicalText + "." + field.getName
 
         val color = minecraftModule.getTypes.toStream
             .flatMap(abstractModuleType => abstractModuleType.getClassToColorMappings.toMap)
